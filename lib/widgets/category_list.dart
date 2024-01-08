@@ -4,6 +4,7 @@ import 'package:money_tracker/utils/icons_list.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({super.key, required this.onChanged});
+  // callback dipanggil ketika nilai kategori dipilih
   final ValueChanged<String?> onChanged;
 
   @override
@@ -11,16 +12,21 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
+  // menyimpan kategori saat ini dipilih
   String currentCategory = '';
+  // menyimpan kategori dlm bentuk list
   List<Map<String, dynamic>> categoryList = [];
 
+  // utk mengontrol scroll pd listview
   final scrollController = ScrollController();
   var appIcons = AppIcons();
+  // penambahan kategori utk semua filter
   var addCat = {
     'name': 'All',
     'icon': FontAwesomeIcons.shop,
   };
 
+  // dipanggil saat objek state pertama kali dibuat
   @override
   void initState() {
     super.initState();
@@ -52,6 +58,7 @@ class _CategoryListState extends State<CategoryList> {
             return GestureDetector(
               onTap: () {
                 setState(() {
+                  // memperbarui current category
                   currentCategory = data['name'];
                   widget.onChanged(data['name']);
                 });
