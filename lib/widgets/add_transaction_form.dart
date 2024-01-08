@@ -14,36 +14,51 @@ class AddTransactionForm extends StatefulWidget {
 }
 
 class _AddTransactionFormState extends State<AddTransactionForm> {
+  // untuk mengakses dan memanipulasi state form
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  // Variabel untuk menyimpan jenis transaksi (income/expense), kategori, dan status loading
   var type = 'income';
   var category = 'Others';
   var isLoading = false;
+  // untuk validasi input fields
   var appValidator = AppValidator();
+  // input fields
   var amountEditController = TextEditingController();
   var titleEditController = TextEditingController();
+  // objek uuid untuk membuat ID unik
   var uid = Uuid();
 
+  // mengirim submit form ke firestore
   Future<void> _submitForm() async {
     if (_formkey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
+      // Mendapatkan objek user yang sedang login
       final user = FirebaseAuth.instance.currentUser;
+      // jam saat ini
       int timestamp = DateTime.now().millisecondsSinceEpoch;
+      // mendapatkan nilai dari input amount
       var amount = int.parse(amountEditController.text);
+      // tanggal saat ini
       DateTime date = DateTime.now();
 
+      // membuat id unik transaksi
       var id = uid.v4();
+      // format bulan & tahun dari tgl saat ini
       String monthyear = DateFormat('MMM y').format(date);
+      // mendapat dokumen user dari firebase
       final userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(user!.uid)
           .get();
 
+      // mendapat value dari dokumen user
       int remainingAmount = userDoc['remainingAmount'];
       int totalIncome = userDoc['totalIncome'];
       int totalExpense = userDoc['totalExpense'];
 
+      // akumulasi nilai berdasarkan jenis transaksi
       if (type == 'income') {
         remainingAmount += amount;
         totalIncome += amount;
@@ -52,6 +67,7 @@ class _AddTransactionFormState extends State<AddTransactionForm> {
         totalExpense += amount;
       }
 
+      // update nilai dari firestore
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -61,6 +77,7 @@ class _AddTransactionFormState extends State<AddTransactionForm> {
         'totalExpense': totalExpense,
         'updatedAt': timestamp,
       });
+      // data transaksi yg akan ditambahkan ke firestore
       var data = {
         'id': id,
         'title': titleEditController.text,
@@ -74,6 +91,7 @@ class _AddTransactionFormState extends State<AddTransactionForm> {
         'category': category,
       };
 
+      // menambahkan data transaksi ke firestore
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -82,6 +100,7 @@ class _AddTransactionFormState extends State<AddTransactionForm> {
           .set(data);
 
       // await authService.login(data, context);
+      // menutup form setelah selesai menambahkan
       Navigator.pop(context);
 
       setState(() {
@@ -115,6 +134,7 @@ class _AddTransactionFormState extends State<AddTransactionForm> {
                 labelText: 'Amount',
               ),
             ),
+            // dropdown utk memilih kategori (iconlist)
             CategoryDropdown(
                 cattype: category,
                 onChanged: (String? value) {
@@ -124,6 +144,7 @@ class _AddTransactionFormState extends State<AddTransactionForm> {
                     });
                   }
                 }),
+            // dropdown utk memilih jenis
             DropdownButtonFormField(
               value: 'income',
               items: [
