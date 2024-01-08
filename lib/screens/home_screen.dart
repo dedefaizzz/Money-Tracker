@@ -8,6 +8,7 @@ import 'package:money_tracker/widgets/transactions_cards.dart';
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
 class HomeScreen extends StatefulWidget {
+  //constructor
   const HomeScreen({super.key});
 
   @override
@@ -15,8 +16,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Variabel untuk menandakan status loading saat logout
   var isLogoutLoading = false;
 
+  // method utk logout
   logOut() async {
     setState(() {
       isLogoutLoading = true;
@@ -31,8 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // Mendapatkan user ID dari pengguna yang saat ini login
   final userId = FirebaseAuth.instance.currentUser!.uid;
 
+  // layout berupa alert dialog
   _dialogBuilder(BuildContext context) {
     return showDialog(
         context: context,
@@ -63,10 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
+          // tombol logout
           IconButton(
               onPressed: () {
                 logOut();
               },
+              // indikator loading jika sedang logout
               icon: isLogoutLoading
                   ? Center(child: CircularProgressIndicator())
                   : Icon(
