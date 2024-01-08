@@ -1,3 +1,4 @@
+// handling sign up dan login
 class AppValidator {
   String? validateUsername(value) {
     if (value!.isEmpty) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// database untuk icon
 class AppIcons {
   final List<Map<String, dynamic>> homeExpensesCategories = [
     {
