@@ -11,14 +11,18 @@ class TransactionScreen extends StatefulWidget {
 }
 
 class _TransactionScreenState extends State<TransactionScreen> {
+  // Variabel untuk menyimpan kategori transaksi yang sedang dipilih
   var category = 'All';
+  // Variabel untuk menyimpan bulan dan tahun yang sedang ditampilkan
   var monthYear = '';
 
+  // inisialisasi variabel saat pertama kali widget dibuat
   @override
   void initState() {
     super.initState();
     DateTime now = DateTime.now();
     setState(() {
+      // mengambil bulan & tahun saat ini dgn dateformat
       monthYear = DateFormat('MMM y').format(now);
     });
   }
@@ -29,6 +33,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       appBar: AppBar(
         title: Text('Expansive'),
       ),
+      // widget menampilkan time line bulan
       body: Column(
         children: [
           TimeLineMonth(
@@ -40,6 +45,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               }
             },
           ),
+          // Widget CategoryList untuk menampilkan daftar kategori transaksi
           CategoryList(
             onChanged: (String? value) {
               if (value != null) {
@@ -49,6 +55,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               }
             },
           ),
+          // filter utk history transaksi
           TypeTabBar(category: category, monthYear: monthYear),
         ],
       ),
