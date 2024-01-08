@@ -13,25 +13,27 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
+  // TextEditingController untuk masing-masing input field
   final _usernameController = TextEditingController();
-
   final _emailController = TextEditingController();
-
   final _passwordController = TextEditingController();
-
   final _phoneController = TextEditingController();
 
   // utk akses dan manipulasi form state (validasi & submission)
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
+  // Objek AuthService untuk mengelola proses otentikasi
   var authService = AuthService();
   var isLoading = false;
 
+  // Method untuk mengirimkan data pendaftaran ke AuthService
   Future<void> _submitForm() async {
+    // Validasi form sebelum mengirim data
     if (_formkey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
+      // Membuat objek data dengan informasi yang diambil dari input fields yg ada di firebase
       var data = {
         'username': _usernameController.text,
         'email': _emailController.text,
@@ -42,6 +44,7 @@ class _SignUpViewState extends State<SignUpView> {
         'totalExpense': 0,
       };
 
+      // memanggil createUser utk membuat akun baru
       await authService.createUser(data, context);
 
       setState(() {
@@ -54,7 +57,7 @@ class _SignUpViewState extends State<SignUpView> {
     }
   }
 
-  // utk akses dan manipulasi form state (validasi & submission)
+  // validasi input fields
   var appValidator = AppValidator();
 
   @override
@@ -63,6 +66,7 @@ class _SignUpViewState extends State<SignUpView> {
       backgroundColor: backgroundColor,
       body: Row(
         children: [
+          // bagian dari row dapat mengambil sisa ruang yang tersedia.
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -170,6 +174,7 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
+  // method utk style
   InputDecoration _buildInputDecoration(String label, IconData prefixIcon) =>
       InputDecoration(
         fillColor: fillColor,
