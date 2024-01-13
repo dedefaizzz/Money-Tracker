@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_tracker/widgets/transaction_card.dart';
 
+// menampilkan daftar transaksi terbaru pada antarmuka pengguna
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
 // ignore: must_be_immutable
@@ -26,22 +27,25 @@ class TransactionsCard extends StatelessWidget {
               ),
             ],
           ),
-          RecentTransactionsList(),
+          RecentTransactionsList(), // Menampilkan daftar transaksi terbaru
         ],
       ),
     );
   }
 }
 
+// digunakan untuk menampilkan daftar transaksi terbaru dari Firebase Firestore di navigasi home
 class RecentTransactionsList extends StatelessWidget {
   RecentTransactionsList({
     super.key,
   });
 
+  // Mengambil ID pengguna yang sedang masuk
   final userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
+    // melakukan perubahan data dari Firebase Firestore
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('users')
@@ -58,8 +62,9 @@ class RecentTransactionsList extends StatelessWidget {
         } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Center(child: Text('No Transactions found'));
         }
-        var data = snapshot.data!.docs;
 
+        // Jika data transaksi terbaru tersedia, membuat ListView untuk menampilkan daftar transaksi menggunakan TransactionCard untuk setiap kartu transaksi
+        var data = snapshot.data!.docs;
         return ListView.builder(
           shrinkWrap: true,
           itemCount: data.length,
