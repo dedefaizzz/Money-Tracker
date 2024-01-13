@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_tracker/widgets/transaction_list.dart';
 
+// menampilkan tabBar dan tabBar view
+// yg berisi daftar transaksi berdasarkan income / expense
 class TypeTabBar extends StatelessWidget {
   const TypeTabBar(
       {super.key, required this.category, required this.monthYear});
